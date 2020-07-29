@@ -1,0 +1,17 @@
+{
+  "name": "selfreport",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cron": "^1.8.2",
+    "nodemailer": "^6.4.10",
+    "puppeteer": "^5.2.1",
+    "request-promise-native": "^1.0.9"
+  }
+}
