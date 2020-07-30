@@ -10,6 +10,8 @@ username,passwor填写自己的一卡通账号密码
 
 node安装请看这里[node](http://nodejs.cn/)
 
+### 分支为小程序实现简单登录
+
 ### 仅供学习交流使用
 
 ### 如果觉得好用就麻烦点个star哦～
