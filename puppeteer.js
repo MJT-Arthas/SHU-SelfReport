@@ -12,8 +12,8 @@ let transporter = nodemailer.createTransport({
   },
 });
 let useArray = [
-  { username: '18722898', password: 'Tt19960227', mail: 'mjt.arthas@foxmail.com' },
-  { username: '18722898', password: 'Tt19960227', mail: 'mjt.arthas@foxmail.com' },
+  // { username: '18722898', password: 'Tt19960227', mail: 'mjt.arthas@foxmail.com' },
+  { username: '18722902', password: 'HXXldz38a,', mail: 'mjt.arthas@foxmail.com' },
 ]
 
 
@@ -24,7 +24,7 @@ const selfReport = async function (time, reportTime, username, password, mail) {
     headless: false,
     defaultViewport: { width: 1440, height: 780 },
     ignoreHTTPSErrors: false, //忽略 https 报错
-    args: ['--start-fullscreen'] //全屏打开页面
+    // args: ['--start-fullscreen'] //全屏打开页面
   });
   const page = await browser.newPage();
   await page.goto('https://newsso.shu.edu.cn/login');
@@ -95,17 +95,21 @@ useArray.forEach((item) => {
   selfReport(1, reportTime, item.username, item.password, item.mail)
 })
 // 自动运行两次
-// new CronJob('00 00 8 * * *', () => {
-//   let nd = new Date()12347890
-//   reportTime = dateFormat("HH:MM:SS", nd)
-//   selfReport(1, reportTime, username, password, mail)
-// }, null, true, 'Asia/Shanghai');
+new CronJob('00 00 8 * * *', () => {
+  let nd = new Date()
+  reportTime = dateFormat("HH:MM:SS", nd)
+  useArray.forEach((item) => {
+    selfReport(1, reportTime, item.username, item.password, item.mail)
+  })
+}, null, true, 'Asia/Shanghai');
 
-// new CronJob('0 0 21 * * *', () => {
-//   let nd = new Date()
-//   reportTime = dateFormat("HH:MM:SS", nd)
-//   selfReport(2, reportTime, username, password, mail)
-// }, null, true, 'Asia/Shanghai');
+new CronJob('0 0 21 * * *', () => {
+  let nd = new Date()
+  reportTime = dateFormat("HH:MM:SS", nd)
+  useArray.forEach((item) => {
+    selfReport(2, reportTime, item.username, item.password, item.mail)
+  })
+}, null, true, 'Asia/Shanghai');
 
 
 function sendMail(mail, time) {
