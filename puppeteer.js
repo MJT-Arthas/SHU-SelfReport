@@ -7,14 +7,15 @@ let transporter = nodemailer.createTransport({
   port: 465,//端口号
   secure: true, // true for 465, false for other ports
   auth: {
-    user: 'abc.qq.com', // 发送方邮箱地址
-    pass: '填写自己邮箱的SMTP服务密码', // mtp验证码
+    user: 'mjt.arthas@foxmail.com', // 发送方邮箱地址
+    pass: 'hoikojsaxxbxbffd', // mtp验证码
   },
 });
+let useArray = [
+  { username: '18722898', password: 'Tt19960227', mail: 'mjt.arthas@foxmail.com' },
+  { username: '18722898', password: 'Tt19960227', mail: 'mjt.arthas@foxmail.com' },
+]
 
-let username = 'username'
-let password = 'password'
-let mail = 'abc@qq.com'
 
 const selfReport = async function (time, reportTime, username, password, mail) {
   const browser = await puppeteer.launch({
@@ -83,29 +84,33 @@ const selfReport = async function (time, reportTime, username, password, mail) {
   await Promise.all([
     submit2.click(),
   ]);
-  sendMail(mail, reportTime)
+  await sendMail(mail, reportTime)
+  await page.close();
+  await browser.close();
 }
 
-// let nd = new Date()
-// reportTime = dateFormat("HH:MM:SS", nd)
-// selfReport(1, reportTime)
-//自动运行两次
-new CronJob('00 00 8 * * *', () => {
-  let nd = new Date()
-  reportTime = dateFormat("HH:MM:SS", nd)
-  selfReport(1, reportTime, username, password, mail)
-}, null, true, 'Asia/Shanghai');
+let nd = new Date()
+reportTime = dateFormat("HH:MM:SS", nd)
+useArray.forEach((item) => {
+  selfReport(1, reportTime, item.username, item.password, item.mail)
+})
+// 自动运行两次
+// new CronJob('00 00 8 * * *', () => {
+//   let nd = new Date()12347890
+//   reportTime = dateFormat("HH:MM:SS", nd)
+//   selfReport(1, reportTime, username, password, mail)
+// }, null, true, 'Asia/Shanghai');
 
-new CronJob('0 0 21 * * *', () => {
-  let nd = new Date()
-  reportTime = dateFormat("HH:MM:SS", nd)
-  selfReport(2, reportTime, username, password, mail)
-}, null, true, 'Asia/Shanghai');
+// new CronJob('0 0 21 * * *', () => {
+//   let nd = new Date()
+//   reportTime = dateFormat("HH:MM:SS", nd)
+//   selfReport(2, reportTime, username, password, mail)
+// }, null, true, 'Asia/Shanghai');
 
 
 function sendMail(mail, time) {
   let mailObj = {
-    from: '"Fred Foo 👻" <1xxxxxxxl.com>', // sender address
+    from: '"Fred Foo 👻" <mjt.arthas@foxmail.com>', // sender address
     to: mail, // list of receivers
     subject: "每日一报", // Subject line
     text: `您今日的每日二报在${time}已自动填写完成`, // plain text body
@@ -113,7 +118,7 @@ function sendMail(mail, time) {
   return new Promise((res, rej) => {
     transporter.sendMail(mailObj, (err, data) => {
       if (err) {
-        rej()
+        rej(console.log(err))
       } else {
         res()
       }
@@ -124,7 +129,7 @@ function sendMail(mail, time) {
 function dateFormat(fmt, date) {
   let ret;
   const opt = {
-    "Y+": date.getFullYear().toString(),        // 年
+    "Y+": date.getFullYear().toString(),        // 年12347890
     "m+": (date.getMonth() + 1).toString(),     // 月
     "d+": date.getDate().toString(),            // 日
     "H+": date.getHours().toString(),           // 时
