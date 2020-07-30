@@ -7,13 +7,13 @@ let transporter = nodemailer.createTransport({
   port: 465,//端口号
   secure: true, // true for 465, false for other ports
   auth: {
-    user: 'mjt.arthas@foxmail.com', // 发送方邮箱地址
-    pass: 'hoikojsaxxbxbffd', // mtp验证码
+    user: '', // 发送方邮箱地址
+    pass: '', // mtp验证码
   },
 });
 let useArray = [
-  { username: '18722898', password: 'Tt19960227', mail: 'mjt.arthas@foxmail.com' },
-  { username: '18722898', password: 'Tt19960227', mail: 'mjt.arthas@foxmail.com' },
+  { username: '', password: '', mail: '' },
+  { username: '', password: '', mail: '' },
 ]
 
 
@@ -110,7 +110,7 @@ useArray.forEach((item) => {
 
 function sendMail(mail, time) {
   let mailObj = {
-    from: '"Fred Foo 👻" <mjt.arthas@foxmail.com>', // sender address
+    from: '"Fred Foo 👻" <>', // sender address
     to: mail, // list of receivers
     subject: "每日一报", // Subject line
     text: `您今日的每日二报在${time}已自动填写完成`, // plain text body
