@@ -2,9 +2,8 @@
 
 #扫码打开小程序即可
 
-<center>  <!--开始居中对齐-->
 ![avatar](https://raw.githubusercontent.com/MJT-Arthas/SHU-SelfReport/master/%E4%BA%8C%E7%BB%B4%E7%A0%81%E5%9B%BE%E7%89%87.jpg)
-</center> <!--结束居中对齐-->
+
 # 到点了自动提醒大家~~
 
 node环境运行 npm install 安装相关依赖
