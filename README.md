@@ -1,6 +1,6 @@
-# SHU 每日两报一键填写
+# SHU 每日两报一键填写与自动填写
 
-#扫码打开小程序即可
+# 为方便填写 扫码打开小程序即可
 
 
  <img src="https://raw.githubusercontent.com/MJT-Arthas/SHU-SelfReport/master/%E4%BA%8C%E7%BB%B4%E7%A0%81%E5%9B%BE%E7%89%87.jpg" width = "200" height = "200" alt="小程序" align=center />
