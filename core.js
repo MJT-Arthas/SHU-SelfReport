@@ -70,14 +70,16 @@ const selfReport = async function (time, username, password) {
       submit2.click(),
     ]);
 
-    let submit3 = await page.$('#fineui_19')
-    await Promise.all([
-      submit3.click(),
-    ]);
+    // let submit3 = await page.$('#fineui_19')
+    // await Promise.all([
+    //   submit3.click(),
+    //   page.waitForNavigation()
+    // ]);
 
     await page.close();
     await browser.close()
   } catch (err) {
+    console.log(err)
     await page.close();
     await browser.close()
     return err

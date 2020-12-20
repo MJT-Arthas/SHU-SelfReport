@@ -2,150 +2,197 @@ const puppeteer = require('puppeteer');
 const CronJob = require('cron').CronJob;
 const nodemailer = require("nodemailer");
 
+
 let transporter = nodemailer.createTransport({
-  host: "smtp.qq.com",//发送方邮箱
-  port: 465,//端口号
-  secure: true, // true for 465, false for other ports
-  auth: {
-    user: 'mjt.arthas@foxmail.com', // 发送方邮箱地址
-    pass: 'hoikojsaxxbxbffd', // mtp验证码
-  },
+    host: "smtp.qq.com",//发送方邮箱
+    port: 465,//端口号
+    secure: true, // true for 465, false for other ports
+    auth: {
+        user: 'mjt.arthas@foxmail.com', // 发送方邮箱地址
+        pass: 'ldvzffbnkfrjbdfb', // mtp验证码
+    },
 });
 let useArray = [
-  // { username: '18722898', password: 'Tt19960227', mail: 'mjt.arthas@foxmail.com' },
-  { username: '18722902', password: 'HXXldz38a,', mail: 'mjt.arthas@foxmail.com' },
+    // { username: '18722838', password: '4399Lyujie', mail: 'Liuhaha@shu.edu.cn' },
+    // { username: '18722903', password: '29Sherlock', mail: '418155278@qq.com' },
+    // { username: '17722510', password: 'Cty95108@qq.com', mail: '564177836@qq.com' },
+    // { username: '18722906', password: 'Yz997524', mail: 'FFFFFarewell@shu.edu.cn' },
+    // { username: '17820286', password: '20091187America', mail: '1016895398@qq.com' },
+    // { username: '18722902', password: 'HXXldz38a,', mail: 'hexiangxi20@163.com' },
+    { username: '18722898', password: 'Tt19960227', mail: 'mjt.arthas@foxmail.com' },
+    // { username: '19722545', password: 'Pun71221', mail: 'mjt.arthas@foxmail.com' },
+    // { username: '18722838', password: '4399jieyuL', mail: 'Liuhaha@shu.edu.cn' },
 ]
 
+function sleep(time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
+}
 
 const selfReport = async function (time, reportTime, username, password, mail) {
-  const browser = await puppeteer.launch({
-    headless: true,   //有浏览器界面启动
-    slowMo: 10,    //放慢速度
-    headless: false,
-    defaultViewport: { width: 1440, height: 780 },
-    ignoreHTTPSErrors: false, //忽略 https 报错
-    // args: ['--start-fullscreen'] //全屏打开页面
-  });
-  const page = await browser.newPage();
-  await page.goto('https://newsso.shu.edu.cn/login');
-  //输入账号密码
-  const uniqueIdElement = await page.$('#username');
-  await uniqueIdElement.type(username, { delay: 0 });
-  const passwordElement = await page.$('#password', { delay: 0 });
-  await passwordElement.type(password);
-  //点击确定按钮进行登录
-  let okButtonElement = await page.$('#login-submit');
-  //等待页面跳转完成，一般点击某个按钮需要跳转时，都需要等待 page.waitForNavigation() 执行完毕才表示跳转成功
-  await Promise.all([
-    okButtonElement.click(),
-    page.waitForNavigation()
-  ]);
+    const browser = await puppeteer.launch({
+        headless: false,   //有浏览器界面启动
+        slowMo: 10,    //放慢速度
+        // headless: true,
+        // defaultViewport: { width: 1440, height: 780 },
+        // ignoreHTTPSErrors: false, //忽略 https 报错
+        args: [
+            // '--disable-setuid-sandbox',
+            '--no-sandbox',
+            // '--ignore-certificate-errors',
+            // '--remote-debugging-port=9222',
+            // '--disable-web-security'
+        ]
+        // args: ['--start-fullscreen'] //全屏打开页面
+    });
+    try {
+        const page = await browser.newPage();
+        await page.goto('https://selfreport.shu.edu.cn/Default.aspx');
+        //输入账号密码
+        const uniqueIdElement = await page.$('#username');
+        await uniqueIdElement.type(username, { delay: 0 });
+        const passwordElement = await page.$('#password', { delay: 0 });
+        await passwordElement.type(password);
+        //点击确定按钮进行登录
+        let okButtonElement = await page.$('#submit');
+        //等待页面跳转完成，一般点击某个按钮需要跳转时，都需要等待 page.waitForNavigation() 执行完毕才表示跳转成功
+        await Promise.all([
+            okButtonElement.click(),
+            page.waitForNavigation()
+        ]);
 
-  await page.goto('https://selfreport.shu.edu.cn/Default.aspx');
-  let reportButtonElement = await page.$('#lnkReport');
-  await Promise.all([
-    reportButtonElement.click(),
-    page.waitForNavigation()
-  ]);
-  let dayReport = await page.$('#p1_Button1');
-  let nightReport = await page.$('#p1_Button2');
-  if (time == 1) {
-    await Promise.all([
-      dayReport.click(),
-      page.waitForNavigation()
-    ]);
-  }
-  else {
-    await Promise.all([
-      nightReport.click(),
-      page.waitForNavigation()
-    ]);
-  }
-  //勾选承诺
-  await page.evaluate(() => {
-    document.querySelector('#p1_ChengNuo-inputEl').click()
-  });
-  await page.evaluate(() => document.getElementById("p1_TiWen-inputEl").value = "")//防止已经存在默认体温
-  const temp = await page.$('#p1_TiWen-inputEl', { delay: 0 });
-  await temp.type('37');
-  //勾选绿码
-  await page.evaluate(() => {
-    document.querySelector('#fineui_7-inputEl-icon').click()
-  });
+        await page.goto('https://selfreport.shu.edu.cn/Default.aspx');
+        if (time == 1) {
+            //早报
+            await page.goto('https://selfreport.shu.edu.cn/XueSFX/HalfdayReport.aspx?t=1');
+        }
+        else {
+            //晚报
+            await page.goto('https://selfreport.shu.edu.cn/XueSFX/HalfdayReport.aspx?t=2');
+        }
+        //勾选承诺
+        await page.evaluate(() => {
+            document.querySelector('#p1_ChengNuo-inputEl').click()
+        });
+        let num = 36 + Math.random()  //随机体温
+        num = num.toFixed(1)
+        num = num.toString()
+        await page.evaluate(() => document.getElementById("p1_TiWen-inputEl").value = "")//防止已经存在默认体温
+        const temp = await page.$('#p1_TiWen-inputEl', { delay: 1 });
+        await temp.type(num);
 
-  let submit = await page.$('#p1_ctl00_btnSubmit');
+        // 风险地区勾选
+        await page.evaluate(() => {
+            document.querySelector('#fineui_11-inputEl-icon').click()
+        });
+        await page.evaluate(() => {
+            document.querySelector('#fineui_13-inputEl-icon').click()
+        });
 
-  await Promise.all([
-    submit.click(),
-  ]);
+        await page.evaluate(() => {
+            document.querySelector('#fineui_15-inputEl-icon').click()
+        });
+
+        await page.evaluate(() => {
+            document.querySelector('#fineui_21-inputEl-icon').click()
+        });
+        await page.evaluate(() => {
+            document.querySelector('#fineui_23-inputEl-icon').click()
+        });
 
 
-  let submit2 = await page.$('#fineui_14')
-  await Promise.all([
-    submit2.click(),
-  ]);
-  await sendMail(mail, reportTime)
-  await page.close();
-  await browser.close();
+        //勾选绿码
+        await page.evaluate(() => {
+            document.querySelector('#fineui_7-inputEl-icon').click()
+        });
+        //选择校区（宝山）
+        await page.evaluate(() => {
+            document.querySelector('#fineui_6-inputEl-icon').click()
+        });
+
+        let submit = await page.$('#p1_ctl00_btnSubmit');
+
+        await Promise.all([
+            submit.click(),
+        ]);
+
+
+        let submit2 = await page.$('#fineui_32')
+        await Promise.all([
+            submit2.click(),
+        ]);
+        // // await  sendMail(mail, reportTime)
+        // await sleep(1000)
+        // await page.close();
+        // await browser.close();
+        console.log('报完了鸭')
+    } catch (e) {
+        console.log(e);
+    }
 }
 
 let nd = new Date()
 reportTime = dateFormat("HH:MM:SS", nd)
-useArray.forEach((item) => {
-  selfReport(1, reportTime, item.username, item.password, item.mail)
+useArray.forEach((item, index) => {
+    setTimeout(() => {
+        selfReport(1, reportTime, item.username, item.password, item.mail)
+    }, 10000 * index)
 })
 // 自动运行两次
-new CronJob('00 00 8 * * *', () => {
-  let nd = new Date()
-  reportTime = dateFormat("HH:MM:SS", nd)
-  useArray.forEach((item) => {
-    selfReport(1, reportTime, item.username, item.password, item.mail)
-  })
-}, null, true, 'Asia/Shanghai');
+// new CronJob('00 26 4 * * *', () => {
+//   let nd = new Date()
+//   reportTime = dateFormat("HH:MM:SS", nd)
+//   useArray.forEach((item, index) => {
+//     setTimeout(() => {
+//       selfReport(1, reportTime, item.username, item.password, item.mail)
+//     }, 10000 * index)
+//   })
+// }, null, true, 'Asia/Shanghai');
 
-new CronJob('0 0 21 * * *', () => {
-  let nd = new Date()
-  reportTime = dateFormat("HH:MM:SS", nd)
-  useArray.forEach((item) => {
-    selfReport(2, reportTime, item.username, item.password, item.mail)
-  })
-}, null, true, 'Asia/Shanghai');
+// new CronJob('00 36 22 * * *', () => {
+//   let nd = new Date()
+//   reportTime = dateFormat("HH:MM:SS", nd)
+//   useArray.forEach((item, index) => {
+//     setTimeout(() => {
+//       selfReport(2, reportTime, item.username, item.password, item.mail)
+//     }, 10000 * index)
+//   })
+// }, null, true, 'Asia/Shanghai');
 
 
 function sendMail(mail, time) {
-  let mailObj = {
-    from: '"Fred Foo 👻" <mjt.arthas@foxmail.com>', // sender address
-    to: mail, // list of receivers
-    subject: "每日一报", // Subject line
-    text: `您今日的每日二报在${time}已自动填写完成`, // plain text body
-  }
-  return new Promise((res, rej) => {
-    transporter.sendMail(mailObj, (err, data) => {
-      if (err) {
-        rej(console.log(err))
-      } else {
-        res()
-      }
-    });
-  })
+    let mailObj = {
+        from: '"Fred Foo 👻" <mjt.arthas@foxmail.com>', // sender address
+        to: mail, // list of receivers
+        subject: "每日一报", // Subject line
+        text: `您今日的每日二报在${time}已自动填写完成`, // plain text body
+    }
+    return new Promise((res, rej) => {
+        transporter.sendMail(mailObj, (err, data) => {
+            if (err) {
+                rej(console.log(err))
+            } else {
+                res()
+            }
+        });
+    })
 }
 
 function dateFormat(fmt, date) {
-  let ret;
-  const opt = {
-    "Y+": date.getFullYear().toString(),        // 年12347890
-    "m+": (date.getMonth() + 1).toString(),     // 月
-    "d+": date.getDate().toString(),            // 日
-    "H+": date.getHours().toString(),           // 时
-    "M+": date.getMinutes().toString(),         // 分
-    "S+": date.getSeconds().toString()          // 秒
-    // 有其他格式化字符需求可以继续添加，必须转化成字符串
-  };
-  for (let k in opt) {
-    ret = new RegExp("(" + k + ")").exec(fmt);
-    if (ret) {
-      fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
+    let ret;
+    const opt = {
+        "Y+": date.getFullYear().toString(),        // 年12347890
+        "m+": (date.getMonth() + 1).toString(),     // 月
+        "d+": date.getDate().toString(),            // 日
+        "H+": date.getHours().toString(),           // 时
+        "M+": date.getMinutes().toString(),         // 分
+        "S+": date.getSeconds().toString()          // 秒
+        // 有其他格式化字符需求可以继续添加，必须转化成字符串
     };
-  };
-  return fmt;
+    for (let k in opt) {
+        ret = new RegExp("(" + k + ")").exec(fmt);
+        if (ret) {
+            fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
+        };
+    };
+    return fmt;
 }
