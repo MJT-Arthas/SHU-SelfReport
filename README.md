@@ -3,7 +3,7 @@
 #扫码打开小程序即可
 
 
- <img src="https://raw.githubusercontent.com/MJT-Arthas/SHU-SelfReport/master/%E4%BA%8C%E7%BB%B4%E7%A0%81%E5%9B%BE%E7%89%87.jpg" width = "300" height = "200" alt="小程序" align=center />
+ <img src="https://raw.githubusercontent.com/MJT-Arthas/SHU-SelfReport/master/%E4%BA%8C%E7%BB%B4%E7%A0%81%E5%9B%BE%E7%89%87.jpg" width = "200" height = "200" alt="小程序" align=center />
  
 # 到点了自动提醒大家~~
 
