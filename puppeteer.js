@@ -8,25 +8,17 @@ let transporter = nodemailer.createTransport({
     port: 465,//端口号
     secure: true, // true for 465, false for other ports
     auth: {
-        user: 'mjt.arthas@foxmail.com', // 发送方邮箱地址
-        pass: 'ldvzffbnkfrjbdfb', // mtp验证码
+        user: '', // 发送方邮箱地址
+        pass: '', // mtp验证码
     },
 });
 let useArray = [
-    // { username: '18722838', password: '4399Lyujie', mail: 'Liuhaha@shu.edu.cn' },
-    // { username: '18722903', password: '29Sherlock', mail: '418155278@qq.com' },
-    // { username: '17722510', password: 'Cty95108@qq.com', mail: '564177836@qq.com' },
-    // { username: '18722906', password: 'Yz997524', mail: 'FFFFFarewell@shu.edu.cn' },
-    // { username: '17820286', password: '20091187America', mail: '1016895398@qq.com' },
-    // { username: '18722902', password: 'HXXldz38a,', mail: 'hexiangxi20@163.com' },
-    { username: '18722898', password: 'Tt19960227', mail: 'mjt.arthas@foxmail.com' },
-    // { username: '19722545', password: 'Pun71221', mail: 'mjt.arthas@foxmail.com' },
-    // { username: '18722838', password: '4399jieyuL', mail: 'Liuhaha@shu.edu.cn' },
-]
+    { username: '18722***', password: '***', mail: '***' },
 
-function sleep(time) {
-    return new Promise((resolve) => setTimeout(resolve, time));
-}
+
+    function sleep(time) {
+        return new Promise((resolve) => setTimeout(resolve, time));
+    }
 
 const selfReport = async function (time, reportTime, username, password, mail) {
     const browser = await puppeteer.launch({
@@ -80,46 +72,102 @@ const selfReport = async function (time, reportTime, username, password, mail) {
         const temp = await page.$('#p1_TiWen-inputEl', { delay: 1 });
         await temp.type(num);
 
-        // 风险地区勾选
+
+        const search_btn = await page.$('#p1_pnlDangSZS_ckda-inputEl');
+        await search_btn.click();
+
+        //获取答案
+        const text = await page.$eval('.f-messagebox-message', el => el.textContent);
+        //关闭提示框
+        const closebtn = await page.$('#fineui_40');
+        await closebtn.click();
+        //完成选项
+        if (text.indexOf("A") != -1) {
+            await page.evaluate(() => {
+                document.querySelector('#fineui_0-inputEl').click()
+            });
+
+        } else if (text.indexOf("B") != -1) {
+            await page.evaluate(() => {
+                document.querySelector('#fineui_1-inputEl').click()
+            });
+        } else if (text.indexOf("C") != -1) {
+            await page.evaluate(() => {
+                document.querySelector('#fineui_2-inputEl').click()
+            });
+        } else { console.log('DDDD') }
+        await page.evaluate(() => {
+            document.querySelector('#fineui_3-inputEl').click()
+        });
+
+
+
+        //国内
+        await page.evaluate(() => {
+            document.querySelector('#fineui_5-inputEl-icon').click()
+        });
+        //在上海
         await page.evaluate(() => {
             document.querySelector('#fineui_11-inputEl-icon').click()
         });
+        //住校
         await page.evaluate(() => {
             document.querySelector('#fineui_13-inputEl-icon').click()
         });
-
+        //家庭住址
         await page.evaluate(() => {
-            document.querySelector('#fineui_15-inputEl-icon').click()
+            document.querySelector('#fineui_16-inputEl-icon').click()
         });
 
-        await page.evaluate(() => {
-            document.querySelector('#fineui_21-inputEl-icon').click()
-        });
-        await page.evaluate(() => {
-            document.querySelector('#fineui_23-inputEl-icon').click()
-        });
-
-
-        //勾选绿码
-        await page.evaluate(() => {
-            document.querySelector('#fineui_7-inputEl-icon').click()
-        });
-        //选择校区（宝山）
-        await page.evaluate(() => {
-            document.querySelector('#fineui_6-inputEl-icon').click()
-        });
-
-        let submit = await page.$('#p1_ctl00_btnSubmit');
+        //提交
+        let submit = await page.$('#p1_ctl01_btnSubmit');
 
         await Promise.all([
             submit.click(),
         ]);
 
 
-        let submit2 = await page.$('#fineui_32')
+        let submit2 = await page.$('#fineui_44')
         await Promise.all([
             submit2.click(),
         ]);
+        // // 风险地区勾选
+        // await page.evaluate(() => {
+        //     document.querySelector('#fineui_12-inputEl-icon').click()
+        // });
+        // await page.evaluate(() => {
+        //     document.querySelector('#fineui_14-inputEl-icon').click()
+        // });
+
+        // await page.evaluate(() => {
+        //     document.querySelector('#fineui_18-inputEl-icon').click()
+        // });
+
+        // await page.evaluate(() => {
+        //     document.querySelector('#fineui_20-inputEl-icon').click()
+        // });
+        // await page.evaluate(() => {
+        //     document.querySelector('#fineui_23-inputEl-icon').click()
+        // });
+        // await page.evaluate(() => {
+        //     document.querySelector('#fineui_17-inputEl-icon').click()
+        // });
+        // await page.evaluate(() => {
+        //     document.querySelector('#fineui_19-inputEl-icon').click()
+        // });
+
+
+
+        //勾选绿码
+        // await page.evaluate(() => {
+        //     document.querySelector('#fineui_7-inputEl-icon').click()
+        // });
+        //选择校区（宝山）
+        // await page.evaluate(() => {
+        //     document.querySelector('#fineui_6-inputEl-icon').click()
+        // });
+
+
         // // await  sendMail(mail, reportTime)
         // await sleep(1000)
         // await page.close();
