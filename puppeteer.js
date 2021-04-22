@@ -8,20 +8,13 @@ let transporter = nodemailer.createTransport({
     port: 465,//端口号
     secure: true, // true for 465, false for other ports
     auth: {
-        user: 'mjt.arthas@foxmail.com', // 发送方邮箱地址
-        pass: 'ldvzffbnkfrjbdfb', // mtp验证码
+        user: '@foxmail.com', // 发送方邮箱地址
+        pass: '', // mtp验证码
     },
 });
 let useArray = [
-    // { username: '18722838', password: '4399Lyujie', mail: 'Liuhaha@shu.edu.cn' },
-    // { username: '18722903', password: '29Sherlock', mail: '418155278@qq.com' },
-    // { username: '17722510', password: 'Cty95108@qq.com', mail: '564177836@qq.com' },
-    // { username: '18722906', password: 'Yz997524', mail: 'FFFFFarewell@shu.edu.cn' },
-    // { username: '17820286', password: '20091187America', mail: '1016895398@qq.com' },
-    // { username: '18722902', password: 'HXXldz38a,', mail: 'hexiangxi20@163.com' },
-    { username: '18722898', password: 'Tt19960227', mail: 'mjt.arthas@foxmail.com' },
-    // { username: '19722545', password: 'Pun71221', mail: 'mjt.arthas@foxmail.com' },
-    // { username: '18722838', password: '4399jieyuL', mail: 'Liuhaha@shu.edu.cn' },
+    // { username: '', password: '', mail: '@shu.edu.cn' },
+
 ]
 
 function sleep(time) {
