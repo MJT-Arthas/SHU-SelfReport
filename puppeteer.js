@@ -1,4 +1,4 @@
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-core');
 const CronJob = require('cron').CronJob;
 const nodemailer = require("nodemailer");
 
@@ -8,20 +8,29 @@ let transporter = nodemailer.createTransport({
     port: 465,//端口号
     secure: true, // true for 465, false for other ports
     auth: {
-        user: '', // 发送方邮箱地址
-        pass: '', // mtp验证码
+        user: 'mjt.arthas@foxmail.com', // 发送方邮箱地址
+        pass: 'ldvzffbnkfrjbdfb', // mtp验证码
     },
 });
 let useArray = [
-    { username: '18722***', password: '***', mail: '***' },
+    // { username: '18722838', password: '4399Lyujie', mail: 'Liuhaha@shu.edu.cn' },
+    // { username: '18722903', password: '29Sherlock', mail: '418155278@qq.com' },
+    // { username: '17722510', password: 'Cty95108@qq.com', mail: '564177836@qq.com' },
+    // { username: '18722906', password: 'Yz997524', mail: 'FFFFFarewell@shu.edu.cn' },
+    // { username: '17820286', password: '20091187America', mail: '1016895398@qq.com' },
+    // { username: '18722902', password: 'HXXldz38a,', mail: 'hexiangxi20@163.com' },
+    { username: '18722898', password: 'Tt19960227', mail: 'mjt.arthas@foxmail.com' },
+    // { username: '19722545', password: 'Pun71221', mail: 'mjt.arthas@foxmail.com' },
+    // { username: '18722838', password: '4399jieyuL', mail: 'Liuhaha@shu.edu.cn' },
+]
 
-
-    function sleep(time) {
-        return new Promise((resolve) => setTimeout(resolve, time));
-    }
+function sleep(time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
+}
 
 const selfReport = async function (time, reportTime, username, password, mail) {
     const browser = await puppeteer.launch({
+        executablePath: 'C:\Program Files (x86)\\Microsoft/Edge/Application/89.0.774.77/msedge.exe',
         headless: false,   //有浏览器界面启动
         slowMo: 10,    //放慢速度
         // headless: true,
