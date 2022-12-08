@@ -9,9 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.19.0",
+    "body-parser": "^1.20.1",
     "cron": "^1.8.2",
-    "express": "^4.17.1",
+    "express": "^4.18.2",
     "nodemailer": "^6.4.10",
     "puppeteer": "^5.2.1",
     "request-promise-native": "^1.0.9"
